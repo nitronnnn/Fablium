@@ -1,0 +1,83 @@
+// Waybar — ~/.config/waybar/config.jsonc
+{
+  "layer": "top",
+  "position": "top",
+  "height": 34,
+  "margin-top": 6,
+  "margin-left": 10,
+  "margin-right": 10,
+
+  "modules-left": ["hyprland/workspaces", "hyprland/window"],
+  "modules-center": ["clock"],
+  "modules-right": ["tray", "pulseaudio", "network", "cpu", "memory", "battery", "custom/theme", "custom/power"],
+
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "format-icons": {
+      "active": "",
+      "default": ""
+    },
+    "persistent-workspaces": { "*": 5 }
+  },
+
+  "hyprland/window": {
+    "max-length": 40,
+    "separate-outputs": true
+  },
+
+  "clock": {
+    "format": "{:%H:%M}",
+    "format-alt": "{:%A, %d %B %Y}",
+    "tooltip-format": "<tt>{calendar}</tt>"
+  },
+
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
+  },
+
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟 mute",
+    "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] },
+    "on-click": "pavucontrol"
+  },
+
+  "network": {
+    "format-wifi": "󰤨 {essid}",
+    "format-ethernet": "󰈀 lan",
+    "format-disconnected": "󰤭 off",
+    "tooltip-format": "{ipaddr} ({signalStrength}%)",
+    "on-click": "nm-connection-editor"
+  },
+
+  "cpu": {
+    "format": "󰻠 {usage}%",
+    "interval": 3
+  },
+
+  "memory": {
+    "format": "󰍛 {percentage}%",
+    "interval": 5
+  },
+
+  "battery": {
+    "states": { "warning": 25, "critical": 10 },
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-icons": ["󰁺", "󰁼", "󰁾", "󰂀", "󰁹"]
+  },
+
+  "custom/theme": {
+    "format": "󰏘",
+    "tooltip-format": "Сменить тему",
+    "on-click": "~/.config/hypr/scripts/theme-menu.sh",
+    "on-click-right": "~/.config/hypr/scripts/theme-picker.sh"
+  },
+
+  "custom/power": {
+    "format": "󰐥",
+    "on-click": "rofi -show power-menu -modi 'power-menu:~/.config/rofi/power-menu.sh'"
+  }
+}

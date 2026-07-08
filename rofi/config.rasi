@@ -1,0 +1,77 @@
+/* Rofi — ~/.config/rofi/config.rasi */
+@import "colors.rasi"
+
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    font: "JetBrainsMono Nerd Font 12";
+    display-drun: "  Приложения";
+    display-run: "  Команды";
+    display-window: "  Окна";
+    drun-display-format: "{name}";
+}
+
+window {
+    width: 600px;
+    border: 2px;
+    border-color: @accent;
+    border-radius: 12px;
+    background-color: @bg;
+    padding: 16px;
+}
+
+mainbox {
+    background-color: transparent;
+    spacing: 12px;
+}
+
+inputbar {
+    background-color: @surface0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    children: [prompt, entry];
+    spacing: 8px;
+}
+
+prompt {
+    background-color: transparent;
+    text-color: @accent;
+}
+
+entry {
+    background-color: transparent;
+    text-color: @fg;
+    placeholder: "Поиск...";
+    placeholder-color: @muted;
+}
+
+listview {
+    background-color: transparent;
+    lines: 8;
+    spacing: 4px;
+    scrollbar: false;
+}
+
+element {
+    background-color: transparent;
+    text-color: @fg;
+    border-radius: 8px;
+    padding: 8px 10px;
+    spacing: 10px;
+}
+
+element selected.normal {
+    background-color: @accent;
+    text-color: @bg;
+}
+
+element-icon {
+    size: 24px;
+    background-color: transparent;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+    vertical-align: 0.5;
+}
