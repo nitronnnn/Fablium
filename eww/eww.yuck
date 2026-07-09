@@ -90,32 +90,33 @@
             (label :class "font-name" :style "font-family: '${f}';" :text f)))))))
 
 ;; ── Содержимое (одна прокручиваемая страница) ─
+;; ВАЖНО: главный scroll обязан иметь :vexpand true,
+;; иначе GTK схлопывает его в нулевую высоту и панель пустая.
 (defwidget settings-content []
   (box :class "settings-card" :orientation "v" :space-evenly false
     (box :class "settings-header" :orientation "h" :space-evenly false
       (label :class "settings-title" :text "Настройки")
       (box :hexpand true)
       (button :class "close-btn" :cursor "pointer"
-              :onclick "~/.config/hypr/scripts/settings.sh close" :text "󰅖"))
-    (overlay
-      (scroll :class "settings-scroll" :vscroll true :hscroll false
-        (box :class "settings-inner" :orientation "v" :space-evenly false :spacing 22
-          (theme-section)
-          (style-section)
-          (wall-section)
-          (font-section)))
-      ;; маска затухания сверху
-      (box :class "fade-top" :valign "start" :vexpand false :height 26)
-      ;; маска затухания снизу
-      (box :class "fade-bottom" :valign "end" :vexpand false :height 26))))
+              :onclick "~/.config/hypr/scripts/settings.sh close &"
+        (label :text "󰅖")))
+    (scroll :class "settings-scroll" :vscroll true :hscroll false :vexpand true
+      (box :class "settings-inner" :orientation "v" :space-evenly false :spacing 22
+        (theme-section)
+        (style-section)
+        (wall-section)
+        (font-section)))))
 
 ;; ── Окно ─────────────────────────────────────
+;; :focusable false — иначе окно крадёт клавиатурный фокус у всей системы.
+;; :namespace "settings" — под него настроен layerrule (блюр) в hyprland.conf.
 (defwindow settings
   :monitor 0
   :geometry (geometry :x "12px" :y "6px" :anchor "top right"
                       :width "380px" :height "620px")
   :stacking "overlay"
-  :focusable true
+  :focusable false
   :exclusive false
+  :namespace "settings"
   (revealer :transition "slidedown" :reveal settings_open :duration "320ms"
     (settings-content)))
