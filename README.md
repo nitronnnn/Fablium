@@ -41,13 +41,13 @@ chmod +x install.sh
 
 Один базовый цвет порождает палитру: фон, поверхности, текст, приглушённый текст, второй акцент для градиентов — для всех компонентов сразу.
 
-- `SUPER + T` — rofi-меню: пресеты, свой hex, пипетка
+- `SUPER + T` — панель настроек: вкладка «Тема» с пресетами и полем hex
 - `SUPER + SHIFT + T` — пипетка hyprpicker: кликни в любую точку экрана (открой картинку со спектром и бери цвет оттуда)
 - Вручную: `~/.config/hypr/scripts/theme.sh "#ff8800"`
 
 ## Система стилей (форма)
 
-- `SUPER + S` — rofi-меню выбора стиля
+- Панель настроек (`SUPER + T`) → вкладка «Стиль»
 - Вручную: `~/.config/hypr/scripts/style.sh glass|minimal|neon`
 
 | Стиль | Что даёт |
@@ -57,6 +57,24 @@ chmod +x install.sh
 | **neon** | Свечение, градиентная анимированная рамка (borderangle loop), пружинные bounce-анимации |
 
 Всё применяется на лету: Hyprland перечитывает конфиг, Waybar перезагружает CSS, Dunst перезапускается, Kitty меняет прозрачность в живых окнах.
+
+## Панель настроек (eww)
+
+Единая панель на [eww](https://github.com/elkowar/eww) — открывается кликом по 󰒓 в Waybar или по `SUPER + T`.
+
+- **Выезжает из-под кнопки** с анимацией (eww `revealer`, `slideright`), не по центру экрана.
+- **Одна прокручиваемая страница** — тема, стиль, обои и шрифт идут секциями подряд, без резких переходов между «вкладками».
+- **Плавное затухание у краёв** — сверху и снизу области прокрутки градиентные маски, контент растворяется, уходя из виду.
+- **Плавная подсветка выбора** — активная карточка/цвет подсвечивается через CSS-`transition`, без резких перескоков.
+
+| Секция | Что делает | Скрипт |
+|---|---|---|
+| Тема | Пресеты цветов + свой hex | `theme.sh` |
+| Стиль | glass / minimal / neon | `style.sh` |
+| Обои | Миниатюры из `~/Pictures/wallpapers`, применение через `swww` с плавным переходом | `wallpaper.sh`, `list-wallpapers.sh` |
+| Шрифт | Фиксированный набор Nerd Fonts | `font.sh` |
+
+Открыть/закрыть вручную: `~/.config/hypr/scripts/settings.sh toggle`.
 
 ## Хоткеи
 
@@ -76,9 +94,9 @@ chmod +x install.sh
 
 | Хоткей | Действие |
 |---|---|
-| `SUPER + T` | Меню тем (цвет) |
+| `SUPER + T` | Панель настроек (тема / стиль / обои / шрифт) |
 | `SUPER + SHIFT + T` | Пипетка — цвет из любой точки экрана |
-| `SUPER + S` | Меню стилей (glass / minimal / neon) |
+| Клик по 󰒓 в Waybar | Открыть / закрыть панель настроек |
 
 ### Окна
 
@@ -124,13 +142,18 @@ chmod +x install.sh
 ## Как это устроено
 
 ```
-theme.sh "#hex"  ──►  colors.conf / colors.css / colors.rasi / colors.conf / 99-colors.conf
+theme.sh "#hex"  ──►  colors.conf / colors.css / colors.rasi / colors.conf / 99-colors.conf / colors.scss
 style.sh glass   ──►  style.conf  / mode.css   / style.rasi  / style.conf  / 50-style.conf
-                      (hyprland)    (waybar)     (rofi)        (kitty)       (dunst)
+font.sh  "Font"  ──►                font.css    / font.rasi   / font.conf   / 60-font.conf   / font.scss
+                      (hyprland)    (waybar)     (rofi)        (kitty)       (dunst)          (eww)
 ```
 
 Базовые конфиги никогда не трогаются — генераторы пишут только небольшие подключаемые файлы, а компоненты перезагружаются на лету. Пресеты стилей лежат в `*/styles/` и `waybar/modes/` — легко добавить свой четвёртый стиль по образцу.
 
 ## Обои
 
-Положи файл в `~/Pictures/wallpapers/wall.png` (путь настраивается в `hypr/hyprpaper.conf`).
+Положи картинки (png/jpg/jpeg/webp) в `~/Pictures/wallpapers/` — они появятся миниатюрами в панели настроек. Смена делается через `swww` с плавным переходом, выбранные обои сохраняются и восстанавливаются при следующем входе. Вручную: `~/.config/hypr/scripts/wallpaper.sh /путь/к/картинке`.
+
+## Шрифты
+
+Фиксированный набор Nerd Fonts (ставятся `install.sh`): JetBrainsMono, FiraCode, Iosevka, Hack, CascadiaCode. Выбор — в панели настроек; `font.sh` генерирует подключаемые файлы шрифта для Waybar, Kitty, Rofi и Dunst.
