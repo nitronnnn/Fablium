@@ -23,7 +23,22 @@ if ! command -v eww >/dev/null 2>&1; then
     fail "eww не установлен. Поставь: yay -S eww  (или paru -S eww)"
 fi
 
-# 2) Демон запущен? Если нет — стартуем и проверяем, что конфиг грузится.
+# 2) Есть ли конфиг eww? Скрипты лежат в ~/.config/hypr/scripts (симлинк на
+#    dotfiles/scripts), поэтому реальную папку eww/ ищем рядом с дотфайлами.
+if [[ ! -e "$EWW_DIR/eww.yuck" ]]; then
+    # scripts/ -> dotfiles/scripts, значит dotfiles = родитель реальной папки scripts
+    REAL_SCRIPTS="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+    SRC_EWW="$(dirname "$REAL_SCRIPTS")/eww"
+    if [[ -e "$SRC_EWW/eww.yuck" ]]; then
+        echo "[settings.sh] $CONFIG/eww отсутствует — создаю симлинк на $SRC_EWW" | tee -a "$LOG"
+        rm -rf "$EWW_DIR" 2>/dev/null || true
+        ln -sf "$SRC_EWW" "$EWW_DIR"
+    else
+        fail "Нет конфига eww ($EWW_DIR/eww.yuck). Перезапусти ./install.sh или создай симлинк: ln -s <dotfiles>/eww ~/.config/eww"
+    fi
+fi
+
+# 3) Демон запущен? Если нет — стартуем и проверяем, что конфиг грузится.
 if ! eww_cmd ping >/dev/null 2>&1; then
     echo "[settings.sh] $(date) запуск демона eww" >> "$LOG"
     # Запускаем демон и ЛОВИМ ошибки конфига (yuck/scss) в лог.
