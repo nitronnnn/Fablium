@@ -4,3 +4,5 @@
 @import "colors.css";
 @import "base.css";
 @import "mode.css";
+/* font.css генерирует font.sh — импорт последним, чтобы задать шрифт */
+@import "font.css";

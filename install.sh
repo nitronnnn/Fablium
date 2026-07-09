@@ -11,18 +11,36 @@ BACKUP="$HOME/.dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
 
 # ── Пакеты ───────────────────────────────────
 PACMAN_PKGS=(
-    hyprland hyprpaper hyprlock hypridle hyprpicker
-    waybar rofi-wayland kitty dunst
+    hyprland hyprlock hypridle hyprpicker
+    waybar rofi-wayland kitty dunst swww
     grim slurp wl-clipboard cliphist
     brightnessctl playerctl pavucontrol
     network-manager-applet polkit-kde-agent
-    ttf-jetbrains-mono-nerd
+    ttf-jetbrains-mono-nerd ttf-firacode-nerd
+    ttf-iosevka-nerd ttf-hack-nerd ttf-cascadia-code-nerd
     yazi
+)
+
+# Пакеты из AUR (нужен yay или paru)
+AUR_PKGS=(
+    eww
 )
 
 install_packages() {
     echo "==> Установка пакетов через pacman..."
     sudo pacman -S --needed --noconfirm "${PACMAN_PKGS[@]}"
+
+    local helper=""
+    command -v yay  >/dev/null && helper="yay"
+    command -v paru >/dev/null && helper="paru"
+    if [[ -n "$helper" ]]; then
+        echo "==> Установка AUR-пакетов через $helper..."
+        "$helper" -S --needed --noconfirm "${AUR_PKGS[@]}"
+    else
+        echo "!! AUR-хелпер (yay/paru) не найден."
+        echo "   Панель настроек требует eww — установи вручную:"
+        echo "     yay -S eww"
+    fi
 }
 
 # ── Симлинки ─────────────────────────────────
@@ -45,9 +63,13 @@ install_configs() {
     link "$DOTFILES/rofi"    "$CONFIG/rofi"
     link "$DOTFILES/kitty"   "$CONFIG/kitty"
     link "$DOTFILES/dunst"   "$CONFIG/dunst"
+    link "$DOTFILES/eww"     "$CONFIG/eww"
     link "$DOTFILES/scripts" "$CONFIG/hypr/scripts" 2>/dev/null || true
 
     chmod +x "$DOTFILES/scripts/"*.sh "$DOTFILES/rofi/power-menu.sh"
+
+    # Папка обоев для панели настроек
+    mkdir -p "$HOME/Pictures/wallpapers"
 }
 
 apply_default_theme() {
@@ -55,6 +77,8 @@ apply_default_theme() {
     "$DOTFILES/scripts/theme.sh" "#7aa2f7" || true
     echo "==> Применение стиля по умолчанию (glass)..."
     "$DOTFILES/scripts/style.sh" glass || true
+    echo "==> Применение шрифта по умолчанию..."
+    "$DOTFILES/scripts/font.sh" "JetBrainsMono Nerd Font" || true
 }
 
 # ── Запуск ───────────────────────────────────
@@ -74,6 +98,8 @@ apply_default_theme
 
 echo
 echo "Готово! Перелогинься в Hyprland."
-echo "  SUPER+T        — меню выбора темы (цвет)"
+echo "  SUPER+T        — панель настроек (тема / стиль / обои / шрифт)"
 echo "  SUPER+SHIFT+T  — пипетка: выбери цвет из спектра на экране"
-echo "  SUPER+S        — меню выбора стиля (glass / minimal / neon)"
+echo "  Клик по 󰒓 в Waybar — открыть/закрыть панель настроек"
+echo
+echo "Положи картинки в ~/Pictures/wallpapers, чтобы выбирать обои в панели."

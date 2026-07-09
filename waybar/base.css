@@ -57,7 +57,7 @@ window#waybar {
 #cpu,
 #memory,
 #battery,
-#custom-theme,
+#custom-settings,
 #custom-power {
   margin: 4px 3px;
   padding: 0 10px;
@@ -72,7 +72,7 @@ window#waybar {
 #cpu:hover,
 #memory:hover,
 #battery:hover,
-#custom-theme:hover,
+#custom-settings:hover,
 #custom-power:hover {
   background: @surface1;
   color: @accent;
@@ -93,7 +93,7 @@ window#waybar {
   }
 }
 
-#custom-theme {
+#custom-settings {
   color: @accent2;
 }
 

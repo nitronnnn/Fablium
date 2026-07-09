@@ -47,5 +47,10 @@ pkill dunst 2>/dev/null && { dunst & disown; } 2>/dev/null || true
 OPACITY="$(grep -oP '^background_opacity \K[0-9.]+' "$CONFIG/kitty/style.conf" || echo 1.0)"
 command -v kitty >/dev/null && kitty @ --to unix:/tmp/kitty set-background-opacity -a "$OPACITY" 2>/dev/null || true
 
+# eww: обновить переменную стиля (для плавной подсветки карточек)
+if eww -c "$CONFIG/eww" ping >/dev/null 2>&1; then
+    eww -c "$CONFIG/eww" update current_style="$STYLE" >/dev/null 2>&1 || true
+fi
+
 notify-send "Стиль применён" "Режим: $STYLE" -i preferences-desktop-theme 2>/dev/null || true
 echo "Стиль применён: $STYLE"

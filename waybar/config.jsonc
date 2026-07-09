@@ -9,7 +9,7 @@
 
   "modules-left": ["hyprland/workspaces", "hyprland/window"],
   "modules-center": ["clock"],
-  "modules-right": ["tray", "pulseaudio", "network", "cpu", "memory", "battery", "custom/theme", "custom/power"],
+  "modules-right": ["tray", "pulseaudio", "network", "cpu", "memory", "battery", "custom/settings", "custom/power"],
 
   "hyprland/workspaces": {
     "format": "{icon}",
@@ -69,10 +69,10 @@
     "format-icons": ["󰁺", "󰁼", "󰁾", "󰂀", "󰁹"]
   },
 
-  "custom/theme": {
-    "format": "󰏘",
-    "tooltip-format": "Сменить тему",
-    "on-click": "~/.config/hypr/scripts/theme-menu.sh",
+  "custom/settings": {
+    "format": "󰒓",
+    "tooltip-format": "Настройки: тема, стиль, обои, шрифт",
+    "on-click": "~/.config/hypr/scripts/settings.sh toggle",
     "on-click-right": "~/.config/hypr/scripts/theme-picker.sh"
   },
 

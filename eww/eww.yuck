@@ -1,0 +1,121 @@
+;; ─────────────────────────────────────────────
+;;  eww.yuck — панель настроек (тема / стиль / обои / шрифт)
+;;  Открывается кнопкой в Waybar. Одна прокручиваемая
+;;  страница с плавным затуханием у краёв.
+;; ─────────────────────────────────────────────
+
+;; ── Состояние ────────────────────────────────
+(defvar settings_open false)
+(defvar active_section "theme")
+
+;; Текущие значения (читаются из state-файлов)
+(defpoll current_color :interval "2s" :initial "#7aa2f7"
+  `cat $HOME/.config/hypr/.current-theme 2>/dev/null | sed 's/^/#/' || echo "#7aa2f7"`)
+(defpoll current_style :interval "2s" :initial "glass"
+  `cat $HOME/.config/hypr/.current-style 2>/dev/null || echo glass`)
+(defpoll current_font :interval "2s" :initial "JetBrainsMono Nerd Font"
+  `cat $HOME/.config/hypr/.current-font 2>/dev/null || echo "JetBrainsMono Nerd Font"`)
+
+;; Список обоев (JSON-массив путей)
+(defpoll wallpapers :interval "10s" :initial "[]"
+  `$HOME/.config/hypr/scripts/list-wallpapers.sh`)
+
+;; ── Пресеты ──────────────────────────────────
+(defvar palette '["#7aa2f7","#89b4fa","#94e2d5","#a6e3a1","#f9e2af","#fab387","#eba0ac","#f38ba8","#f5c2e7","#cba6f7","#b4befe","#89dceb"]')
+(defvar fontlist '["JetBrainsMono Nerd Font","FiraCode Nerd Font","CaskaydiaCove Nerd Font","Iosevka Nerd Font","Hack Nerd Font"]')
+
+;; ── Виджеты: заголовок секции ────────────────
+(defwidget section-title [icon label]
+  (box :class "section-title" :orientation "h" :space-evenly false :spacing 10
+    (label :class "section-icon" :text icon)
+    (label :class "section-label" :text label)))
+
+;; ── Секция: Тема (цвет) ──────────────────────
+(defwidget theme-section []
+  (box :class "section" :orientation "v" :space-evenly false :spacing 14
+    (section-title :icon "󰏘" :label "Тема")
+    (box :class "swatch-grid" :orientation "h" :space-evenly true :spacing 10
+      (for c in palette
+        (eventbox :class "swatch-wrap" :cursor "pointer"
+          (button :class {c == current_color ? "swatch selected" : "swatch"}
+                  :style "background-color: ${c};"
+                  :onclick "~/.config/hypr/scripts/theme.sh '${c}' >/dev/null 2>&1 & eww -c ~/.config/eww update current_color='${c}'"))))
+    (button :class "action-btn" :cursor "pointer"
+            :onclick "~/.config/hypr/scripts/theme-picker.sh >/dev/null 2>&1 &"
+      (box :orientation "h" :space-evenly false :spacing 8 :halign "center"
+        (label :class "action-icon" :text "󰈋")
+        (label :text "Выбрать цвет с экрана")))))
+
+;; ── Секция: Стиль ────────────────────────────
+(defwidget style-card [id icon name desc]
+  (button :class {id == current_style ? "style-card selected" : "style-card"}
+          :cursor "pointer"
+          :onclick "~/.config/hypr/scripts/style.sh ${id} >/dev/null 2>&1 & eww -c ~/.config/eww update current_style='${id}'"
+    (box :orientation "v" :space-evenly false :spacing 4 :halign "center"
+      (label :class "style-icon" :text icon)
+      (label :class "style-name" :text name)
+      (label :class "style-desc" :text desc))))
+
+(defwidget style-section []
+  (box :class "section" :orientation "v" :space-evenly false :spacing 14
+    (section-title :icon "󰉼" :label "Стиль")
+    (box :class "style-grid" :orientation "h" :space-evenly true :spacing 10
+      (style-card :id "glass"   :icon "󰃟" :name "Стекло"    :desc "блюр")
+      (style-card :id "minimal" :icon "󰝤" :name "Минимал"   :desc "плоско")
+      (style-card :id "neon"    :icon "󰔠" :name "Неон"      :desc "свечение"))))
+
+;; ── Секция: Обои ─────────────────────────────
+(defwidget wall-section []
+  (box :class "section" :orientation "v" :space-evenly false :spacing 14
+    (section-title :icon "󰸉" :label "Обои")
+    (scroll :class "wall-scroll" :hscroll true :vscroll false :height 90
+      (box :class "wall-row" :orientation "h" :space-evenly false :spacing 10
+        (for w in wallpapers
+          (eventbox :cursor "pointer"
+            (button :class "wall-item"
+                    :onclick "~/.config/hypr/scripts/wallpaper.sh '${w}' >/dev/null 2>&1 &"
+              (image :path w :image-width 130 :image-height 74))))))))
+
+;; ── Секция: Шрифт ────────────────────────────
+(defwidget font-section []
+  (box :class "section" :orientation "v" :space-evenly false :spacing 14
+    (section-title :icon "󰛖" :label "Шрифт")
+    (box :class "font-list" :orientation "v" :space-evenly false :spacing 8
+      (for f in fontlist
+        (button :class {f == current_font ? "font-item selected" : "font-item"}
+                :cursor "pointer"
+                :onclick "~/.config/hypr/scripts/font.sh '${f}' >/dev/null 2>&1 & eww -c ~/.config/eww update current_font='${f}'"
+          (box :orientation "h" :space-evenly false :spacing 10
+            (label :class "font-check" :text {f == current_font ? "󰄲" : "󰄱"})
+            (label :class "font-name" :style "font-family: '${f}';" :text f)))))))
+
+;; ── Содержимое (одна прокручиваемая страница) ─
+(defwidget settings-content []
+  (box :class "settings-card" :orientation "v" :space-evenly false
+    (box :class "settings-header" :orientation "h" :space-evenly false
+      (label :class "settings-title" :text "Настройки")
+      (box :hexpand true)
+      (button :class "close-btn" :cursor "pointer"
+              :onclick "~/.config/hypr/scripts/settings.sh close" :text "󰅖"))
+    (overlay
+      (scroll :class "settings-scroll" :vscroll true :hscroll false
+        (box :class "settings-inner" :orientation "v" :space-evenly false :spacing 22
+          (theme-section)
+          (style-section)
+          (wall-section)
+          (font-section)))
+      ;; маска затухания сверху
+      (box :class "fade-top" :valign "start" :vexpand false :height 26)
+      ;; маска затухания снизу
+      (box :class "fade-bottom" :valign "end" :vexpand false :height 26))))
+
+;; ── Окно ─────────────────────────────────────
+(defwindow settings
+  :monitor 0
+  :geometry (geometry :x "12px" :y "6px" :anchor "top right"
+                      :width "380px" :height "620px")
+  :stacking "overlay"
+  :focusable true
+  :exclusive false
+  (revealer :transition "slidedown" :reveal settings_open :duration "320ms"
+    (settings-content)))

@@ -65,7 +65,7 @@ ACCENT2=$(rotate_hue "$ACCENT")         # второй акцент для гр�
 ACCENT_DIM=$(mix "$ACCENT" "$BLACK" 40)
 RED="f38ba8"; GREEN="a6e3a1"; YELLOW="f9e2af"
 
-mkdir -p "$CONFIG/hypr" "$CONFIG/waybar" "$CONFIG/rofi" "$CONFIG/kitty" "$CONFIG/dunst/dunstrc.d"
+mkdir -p "$CONFIG/hypr" "$CONFIG/waybar" "$CONFIG/rofi" "$CONFIG/kitty" "$CONFIG/dunst/dunstrc.d" "$CONFIG/eww"
 
 # ── Hyprland ─────────────────────────────────
 cat > "$CONFIG/hypr/colors.conf" <<EOF
@@ -164,6 +164,22 @@ cat > "$CONFIG/dunst/dunstrc.d/99-colors.conf" <<EOF
     frame_color = "#${RED}"
 EOF
 
+# ── eww (панель настроек) ────────────────────
+cat > "$CONFIG/eww/colors.scss" <<EOF
+// Сгенерировано theme.sh
+\$bg:       #${BG};
+\$surface0: #${SURFACE0};
+\$surface1: #${SURFACE1};
+\$surface2: #${SURFACE2};
+\$fg:       #${FG};
+\$muted:    #${MUTED};
+\$accent:   #${ACCENT};
+\$accent2:  #${ACCENT2};
+\$red:      #${RED};
+\$green:    #${GREEN};
+\$yellow:   #${YELLOW};
+EOF
+
 echo "$ACCENT" > "$STATE_FILE"
 
 # ── Перезагрузка компонентов ─────────────────
@@ -172,6 +188,7 @@ pkill -SIGUSR2 waybar 2>/dev/null || true
 pkill dunst 2>/dev/null && dunst & disown 2>/dev/null || true
 # Kitty перечитает цвета в новых окнах; для живых окон:
 command -v kitty >/dev/null && kitty @ --to unix:/tmp/kitty set-colors -a "$CONFIG/kitty/colors.conf" 2>/dev/null || true
+eww -c "$CONFIG/eww" reload >/dev/null 2>&1 || true
 
 notify-send "Тема применена" "Акцент: #${ACCENT}" -i preferences-desktop-theme 2>/dev/null || true
 echo "Тема применена: #${ACCENT}"

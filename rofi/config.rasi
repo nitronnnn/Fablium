@@ -79,3 +79,6 @@ element-text {
 /* Режим стиля (glass/minimal/neon) — переключает style.sh.
    Импорт в конце: переопределяет базу выше */
 @import "style.rasi"
+
+/* Шрифт генерирует font.sh — импорт самым последним */
+@import "font.rasi"
