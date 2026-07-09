@@ -1,0 +1,16 @@
+/* Режим MINIMAL — плоское непрозрачное окно */
+window {
+    background-color: @bg;
+    border: 1px;
+    border-color: @surface1;
+    border-radius: 4px;
+}
+
+inputbar {
+    background-color: @surface0;
+    border-radius: 2px;
+}
+
+element {
+    border-radius: 2px;
+}

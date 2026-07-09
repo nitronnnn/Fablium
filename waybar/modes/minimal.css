@@ -1,0 +1,34 @@
+/* Режим MINIMAL — плоско, без декора */
+
+window#waybar {
+  background: @bg;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid @surface1;
+}
+
+#workspaces {
+  background: transparent;
+  border-radius: 0;
+}
+
+#workspaces button {
+  border-radius: 0;
+}
+
+#workspaces button.active {
+  background: transparent;
+  border-bottom: 2px solid @accent;
+}
+
+#tray,
+#pulseaudio,
+#network,
+#cpu,
+#memory,
+#battery,
+#custom-theme,
+#custom-power {
+  background: transparent;
+  border-radius: 0;
+}

@@ -75,3 +75,7 @@ element-text {
     text-color: inherit;
     vertical-align: 0.5;
 }
+
+/* Режим стиля (glass/minimal/neon) — переключает style.sh.
+   Импорт в конце: переопределяет базу выше */
+@import "style.rasi"

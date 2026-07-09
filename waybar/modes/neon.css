@@ -1,0 +1,35 @@
+/* Режим NEON — свечение и контрастные рамки */
+
+window#waybar {
+  background: alpha(@bg, 0.8);
+  border-radius: 12px;
+  border: 2px solid @accent;
+  box-shadow: 0 0 12px alpha(@accent, 0.5);
+}
+
+#workspaces button.active {
+  color: @accent;
+  background: alpha(@accent, 0.2);
+  box-shadow: 0 0 6px alpha(@accent, 0.6);
+}
+
+#tray,
+#pulseaudio,
+#network,
+#cpu,
+#memory,
+#battery,
+#custom-theme,
+#custom-power {
+  background: alpha(@surface0, 0.8);
+  border: 1px solid alpha(@accent, 0.35);
+}
+
+#clock {
+  color: @accent;
+  text-shadow: 0 0 8px alpha(@accent, 0.8);
+}
+
+#custom-power {
+  border: 1px solid alpha(@red, 0.5);
+}

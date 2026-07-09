@@ -1,0 +1,22 @@
+/* Режим GLASS — матовое стекло (блюр даёт layerrule Hyprland) */
+
+window#waybar {
+  background: alpha(@bg, 0.55);
+  border-radius: 14px;
+  border: 1px solid alpha(@fg, 0.12);
+}
+
+#workspaces {
+  background: alpha(@surface0, 0.6);
+}
+
+#tray,
+#pulseaudio,
+#network,
+#cpu,
+#memory,
+#battery,
+#custom-theme,
+#custom-power {
+  background: alpha(@surface0, 0.6);
+}

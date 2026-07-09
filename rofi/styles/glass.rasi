@@ -1,0 +1,11 @@
+/* Режим GLASS — полупрозрачное окно, блюр даёт Hyprland */
+window {
+    background-color: @bg-trans;
+    border: 1px;
+    border-color: @accent;
+    border-radius: 16px;
+}
+
+inputbar {
+    background-color: @surface0-trans;
+}

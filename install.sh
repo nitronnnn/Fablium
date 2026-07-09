@@ -53,6 +53,8 @@ install_configs() {
 apply_default_theme() {
     echo "==> Генерация темы по умолчанию (#7aa2f7)..."
     "$DOTFILES/scripts/theme.sh" "#7aa2f7" || true
+    echo "==> Применение стиля по умолчанию (glass)..."
+    "$DOTFILES/scripts/style.sh" glass || true
 }
 
 # ── Запуск ───────────────────────────────────
@@ -72,5 +74,6 @@ apply_default_theme
 
 echo
 echo "Готово! Перелогинься в Hyprland."
-echo "  SUPER+T        — меню выбора темы"
+echo "  SUPER+T        — меню выбора темы (цвет)"
 echo "  SUPER+SHIFT+T  — пипетка: выбери цвет из спектра на экране"
+echo "  SUPER+S        — меню выбора стиля (glass / minimal / neon)"

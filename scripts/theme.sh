@@ -97,12 +97,15 @@ EOF
 cat > "$CONFIG/rofi/colors.rasi" <<EOF
 /* Сгенерировано theme.sh */
 * {
-    bg:       #${BG};
-    surface0: #${SURFACE0};
-    surface1: #${SURFACE1};
-    fg:       #${FG};
-    muted:    #${MUTED};
-    accent:   #${ACCENT};
+    bg:             #${BG};
+    bg-trans:       #${BG}cc;
+    surface0:       #${SURFACE0};
+    surface0-trans: #${SURFACE0}99;
+    surface1:       #${SURFACE1};
+    fg:             #${FG};
+    muted:          #${MUTED};
+    accent:         #${ACCENT};
+    accent2:        #${ACCENT2};
 }
 EOF
 
