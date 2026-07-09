@@ -14,30 +14,14 @@ node_modules
 .next/
 .DS_Store
 
-# ── Генерируемые артефакты дотфайлов (пишутся скриптами в ~/.config) ──
-# Тема (theme.sh)
-hypr/colors.conf
-waybar/colors.css
-rofi/colors.rasi
-kitty/colors.conf
-dunst/dunstrc.d/99-colors.conf
-eww/colors.scss
-# Стиль (style.sh) — активные копии из */styles|modes
-hypr/style.conf
-waybar/mode.css
-rofi/style.rasi
-kitty/style.conf
-dunst/dunstrc.d/50-style.conf
-# Шрифт (font.sh)
-waybar/font.css
-kitty/font.conf
-rofi/font.rasi
-dunst/dunstrc.d/60-font.conf
-eww/font.scss
-# Состояние
+# ── Дотфайлы ─────────────────────────────────
+# Генерируемые скриптами файлы (colors.*, mode.*, style.*, font.*)
+# НЕ игнорируются: в репозитории лежат рабочие значения по умолчанию,
+# чтобы всё работало сразу после клона. Скрипты перезаписывают их локально.
+#
+# Игнорируем только служебное состояние и бэкапы:
 hypr/.current-theme
 hypr/.current-style
 hypr/.current-font
 hypr/.current-wallpaper
-# Бэкапы
 *.bak
