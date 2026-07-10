@@ -12,18 +12,18 @@ BACKUP="$HOME/.dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
 # ── Пакеты ───────────────────────────────────
 PACMAN_PKGS=(
     hyprland hyprlock hypridle hyprpicker
-    waybar rofi-wayland kitty dunst swww
-    grim slurp wl-clipboard cliphist
+    waybar kitty swww
+    grim slurp wl-clipboard cliphist curl
     brightnessctl playerctl pavucontrol
-    network-manager-applet polkit-kde-agent
+    network-manager-applet blueman polkit-kde-agent
     ttf-jetbrains-mono-nerd ttf-firacode-nerd
     ttf-iosevka-nerd ttf-hack-nerd ttf-cascadia-code-nerd
     yazi
 )
 
-# Пакеты из AUR (нужен yay или paru)
+# Quickshell в Arch/AUR (нужен yay или paru, если пакет не в репозитории)
 AUR_PKGS=(
-    eww
+    quickshell
 )
 
 install_packages() {
@@ -38,8 +38,9 @@ install_packages() {
         "$helper" -S --needed --noconfirm "${AUR_PKGS[@]}"
     else
         echo "!! AUR-хелпер (yay/paru) не найден."
-        echo "   Панель настроек требует eww — установи вручную:"
-        echo "     yay -S eww"
+        echo "   Fablium Shell требует Quickshell — установи вручную:"
+        echo "     yay -S quickshell"
+        echo "   До установки будет автоматически запускаться Waybar fallback."
     fi
 }
 
@@ -62,8 +63,10 @@ install_configs() {
     link "$DOTFILES/waybar"  "$CONFIG/waybar"
     link "$DOTFILES/rofi"    "$CONFIG/rofi"
     link "$DOTFILES/kitty"   "$CONFIG/kitty"
+    # Legacy-конфиги оставляем для rollback, но больше не запускаем.
     link "$DOTFILES/dunst"   "$CONFIG/dunst"
     link "$DOTFILES/eww"     "$CONFIG/eww"
+    link "$DOTFILES/quickshell/fablium" "$CONFIG/quickshell/fablium"
     link "$DOTFILES/scripts" "$CONFIG/hypr/scripts" 2>/dev/null || true
 
     chmod +x "$DOTFILES/scripts/"*.sh "$DOTFILES/rofi/power-menu.sh"
@@ -97,9 +100,12 @@ install_configs
 apply_default_theme
 
 echo
-echo "Готово! Перелогинься в Hyprland."
-echo "  SUPER+T        — панель настроек (тема / стиль / обои / шрифт)"
-echo "  SUPER+SHIFT+T  — пипетка: выбери цвет из спектра на экране"
-echo "  Клик по 󰒓 в Waybar — открыть/закрыть панель настроек"
+echo "Готово! Перелогинься в Hyprland или запусти:"
+echo "  ~/.config/hypr/scripts/fablium-shell.sh restart"
+echo "  SUPER+D        — launcher"
+echo "  SUPER+T        — настройки"
+echo "  SUPER+C / N    — control center / уведомления"
+echo "  SUPER+SHIFT+V  — история буфера"
+echo "  SUPER+SHIFT+P  — питание"
 echo
-echo "Положи картинки в ~/Pictures/wallpapers, чтобы выбирать обои в панели."
+echo "Диагностика: ~/.config/hypr/scripts/fablium-doctor.sh"

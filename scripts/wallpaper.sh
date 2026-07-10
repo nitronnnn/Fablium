@@ -45,5 +45,5 @@ elif command -v hyprctl >/dev/null; then
     hyprctl hyprpaper wallpaper ",$WALL" >/dev/null 2>&1 || true
 fi
 
-echo "$WALL" > "$STATE_FILE"
-notify-send "Обои изменены" "$(basename "$WALL")" -i preferences-desktop-wallpaper 2>/dev/null || true
+printf '%s\n' "$WALL" > "$STATE_FILE"
+printf '{"ok":true,"wallpaper":"%s"}\n' "$WALL"

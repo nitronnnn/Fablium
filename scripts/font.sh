@@ -47,11 +47,6 @@ EOF
 
 echo "$FONT" > "$STATE_FILE"
 
-# ── Перезагрузка компонентов ─────────────────
-command -v kitty >/dev/null && kitty @ --to unix:/tmp/kitty set-font-size 12 2>/dev/null || true
-pkill -SIGUSR2 waybar 2>/dev/null || true
-pkill dunst 2>/dev/null && { dunst & disown; } 2>/dev/null || true
-eww -c "$CONFIG/eww" reload >/dev/null 2>&1 || true
-
-notify-send "Шрифт изменён" "$FONT" -i preferences-desktop-font 2>/dev/null || true
-echo "Шрифт применён: $FONT"
+# Fablium Shell обновляет font.family реактивно и остаётся открытым.
+# Kitty использует новый шрифт в следующих окнах; никаких reload/notify-send.
+printf '{"ok":true,"font":"%s"}\n' "$FONT"

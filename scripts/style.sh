@@ -38,19 +38,9 @@ cp "$DOTFILES/dunst/styles/$STYLE.conf" "$CONFIG/dunst/dunstrc.d/50-style.conf"
 
 echo "$STYLE" > "$STATE_FILE"
 
-# ── Перезагрузка компонентов ─────────────────
+# Применяем без перезапуска Fablium Shell и без системных уведомлений.
 command -v hyprctl >/dev/null && hyprctl reload >/dev/null 2>&1 || true
-pkill -SIGUSR2 waybar 2>/dev/null || true
-pkill dunst 2>/dev/null && { dunst & disown; } 2>/dev/null || true
-
-# Живая смена прозрачности kitty
 OPACITY="$(grep -oP '^background_opacity \K[0-9.]+' "$CONFIG/kitty/style.conf" || echo 1.0)"
 command -v kitty >/dev/null && kitty @ --to unix:/tmp/kitty set-background-opacity -a "$OPACITY" 2>/dev/null || true
 
-# eww: обновить переменную стиля (для плавной подсветки карточек)
-if eww -c "$CONFIG/eww" ping >/dev/null 2>&1; then
-    eww -c "$CONFIG/eww" update current_style="$STYLE" >/dev/null 2>&1 || true
-fi
-
-notify-send "Стиль применён" "Режим: $STYLE" -i preferences-desktop-theme 2>/dev/null || true
-echo "Стиль применён: $STYLE"
+printf '{"ok":true,"style":"%s"}\n' "$STYLE"

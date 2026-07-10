@@ -1,28 +1,18 @@
-# Fablium — дотфайлы, полностью написанные ИИ
+# Fablium — Hyprland shell, полностью созданный ИИ
 
-Arch Linux + Hyprland. **Каждая строчка этого репозитория — от конфигов до скриптов и этого README — сгенерирована искусственным интеллектом** (v0 by Vercel). Человек только ставил задачи и присылал скриншоты ошибок; ИИ писал код, чинил совместимость с новыми версиями Hyprland и пушил коммиты в GitHub.
+Arch Linux + Hyprland 0.53+ + Quickshell. Весь репозиторий — QML-интерфейс, конфиги и скрипты — создаётся и поддерживается ИИ (v0 by Vercel) по задачам и реальным отчётам пользователя.
 
-## Идея
+## Что это
 
-Универсальные дотфайлы, которые не привязаны к одной теме или одному стилю:
+Fablium заменяет связку Waybar + eww + Rofi + Dunst одним GPU-анимированным процессом **Quickshell**:
 
-- **Тема = цвет.** Выбираешь любой цвет из спектра (пипеткой прямо с экрана, из пресетов или вводом hex) — и вся палитра для каждого компонента генерируется автоматически и применяется на лету.
-- **Стиль = форма.** Три переключаемых режима — матовое стекло, минимализм, неон — меняют блюр, тени, закругления, прозрачность и характер анимаций сразу везде: Hyprland, Waybar, Rofi, Kitty, Dunst.
-- **Панель настроек.** Единая выезжающая панель на **eww** (кнопка 󰒓 в Waybar): тема, стиль, обои и шрифт в одном месте. Выезжает из-под кнопки с анимацией, одна прокручиваемая страница с плавным затуханием контента у краёв, плавная подсветка выбора.
-- **Анимировано всё.** Окна, рабочие столы, появление Rofi, Waybar и уведомлений (через layer-анимации Hyprland), выезд панели настроек, hover-эффекты.
-
-## Состав
-
-| Путь | Назначение |
-|---|---|
-| `hypr/` | Hyprland, hyprlock, hypridle, hyprpaper + `styles/` (пресеты стилей) |
-| `waybar/` | Панель: `base.css` + `modes/` (glass/minimal/neon) |
-| `rofi/` | Лаунчер, power-меню + `styles/` |
-| `kitty/` | Терминал + `styles/` (прозрачность) |
-| `dunst/` | Уведомления + `styles/` |
-| `eww/` | Панель настроек: `eww.yuck` (виджеты) + `eww.scss` (стили) |
-| `scripts/` | `theme.sh`, `theme-picker.sh`, `style.sh`, `font.sh`, `wallpaper.sh`, `settings.sh`, `list-wallpapers.sh` |
-| `install.sh` | Установка пакетов + симлинки + применение дефолтов |
+- bar на каждом мониторе, popout открывается только у нажатой кнопки;
+- launcher, настройки, control center, уведомления, clipboard history и power menu;
+- тема из любого hex-цвета, режимы glass/minimal/neon и пять Nerd Fonts;
+- live-применение без закрытия настроек и без лишних `notify-send`;
+- обои из папки или прямо из clipboard: изображение, локальный путь либо HTTPS URL;
+- точная интерактивная область окна — невидимые оверлеи не блокируют рабочий стол;
+- Waybar остаётся только безопасным fallback, если Quickshell отсутствует.
 
 ## Установка
 
@@ -33,127 +23,80 @@ chmod +x install.sh
 ./install.sh
 ```
 
-Скрипт ставит пакеты через pacman и AUR (`eww`, `swww`), создаёт симлинки в `~/.config` (старые конфиги автоматически бэкапятся в `~/.dotfiles-backup-*`), применяет тему `#7aa2f7`, стиль `glass` и шрифт по умолчанию. После — перелогинься в Hyprland.
+Нужны актуальные Arch Linux, Hyprland **0.53+**, `yay` или `paru`. Установщик ставит `quickshell`, создаёт `~/.config/quickshell/fablium`, сохраняет старые реальные конфиги в `~/.dotfiles-backup-*` и применяет безопасные дефолты.
 
-Требуется Hyprland **0.53+** (конфиг использует новый синтаксис `windowrule`/`layerrule`/`gesture`) и AUR-хелпер (`yay`/`paru`) для установки `eww`.
+После обновления:
 
-## Система тем (цвет)
-
-Один базовый цвет порождает палитру: фон, поверхности, текст, приглушённый текст, второй акцент для градиентов — для всех компонентов сразу.
-
-- `SUPER + T` — панель настроек: вкладка «Тема» с пресетами и полем hex
-- `SUPER + SHIFT + T` — пипетка hyprpicker: кликни в любую точку экрана (открой картинку со спектром и бери цвет оттуда)
-- Вручную: `~/.config/hypr/scripts/theme.sh "#ff8800"`
-
-## Система стилей (форма)
-
-- Панель настроек (`SUPER + T`) → вкладка «Стиль»
-- Вручную: `~/.config/hypr/scripts/style.sh glass|minimal|neon`
-
-| Стиль | Что даёт |
-|---|---|
-| **glass** | Матовое стекло: блюр, полупрозрачность, мягкие тени, плавные popin-анимации |
-| **minimal** | Плоские цвета, тонкие линии, без блюра и теней, быстрые фейды |
-| **neon** | Свечение, градиентная анимированная рамка (borderangle loop), пружинные bounce-анимации |
-
-Всё применяется на лету: Hyprland перечитывает конфиг, Waybar перезагружает CSS, Dunst перезапускается, Kitty меняет прозрачность в живых окнах.
-
-## Панель настроек (eww)
-
-Единая панель на [eww](https://github.com/elkowar/eww) — открывается кликом по 󰒓 в Waybar или по `SUPER + T`.
-
-- **Выезжает из-под кнопки** с анимацией (eww `revealer`, `slideright`), не по центру экрана.
-- **Одна прокручиваемая страница** — тема, стиль, обои и шрифт идут секциями подряд, без резких переходов между «вкладками».
-- **Плавное затухание у краёв** — сверху и снизу области прокрутки градиентные маски, контент растворяется, уходя из виду.
-- **Плавная подсветка выбора** — активная карточка/цвет подсвечивается через CSS-`transition`, без резких перескоков.
-
-| Секция | Что делает | Скрипт |
-|---|---|---|
-| Тема | Пресеты цветов + свой hex | `theme.sh` |
-| Стиль | glass / minimal / neon | `style.sh` |
-| Обои | Миниатюры из `~/Pictures/wallpapers`, применение через `swww` с плавным переходом | `wallpaper.sh`, `list-wallpapers.sh` |
-| Шрифт | Фиксированный набор Nerd Fonts | `font.sh` |
-
-Открыть/закрыть вручную: `~/.config/hypr/scripts/settings.sh toggle`.
-
-## Хоткеи
-
-### Основное
-
-| Хоткей | Действие |
-|---|---|
-| `SUPER + Enter` | Терминал (kitty) |
-| `SUPER + D` | Rofi — приложения |
-| `SUPER + B` | Браузер (firefox) |
-| `SUPER + E` | Файловый менеджер (yazi) |
-| `SUPER + Q` | Закрыть окно |
-| `SUPER + M` | Выйти из Hyprland |
-| `SUPER + L` | Заблокировать экран (hyprlock) |
-
-### Внешний вид
-
-| Хоткей | Действие |
-|---|---|
-| `SUPER + T` | Панель настроек (тема / стиль / обои / шрифт) |
-| `SUPER + SHIFT + T` | Пипетка — цвет из любой точки экрана |
-| Клик по 󰒓 в Waybar | Открыть / закрыть панель настроек |
-
-### Окна
-
-| Хоткей | Действие |
-|---|---|
-| `SUPER + V` | Плавающее окно |
-| `SUPER + F` | Полный экран |
-| `SUPER + J` | Переключить направление сплита |
-| `SUPER + стрелки` | Фокус между окнами |
-| `SUPER + SHIFT + стрелки` | Переместить окно |
-| `SUPER + ЛКМ (drag)` | Перетащить окно |
-| `SUPER + ПКМ (drag)` | Изменить размер окна |
-
-### Рабочие столы
-
-| Хоткей | Действие |
-|---|---|
-| `SUPER + 1..0` | Перейти на стол 1–10 |
-| `SUPER + SHIFT + 1..0` | Переместить окно на стол 1–10 |
-| `SUPER + колесо мыши` | Следующий / предыдущий стол |
-| Свайп 3 пальцами | Переключение столов (тачпад) |
-
-### Утилиты
-
-| Хоткей | Действие |
-|---|---|
-| `Print` | Скриншот области (grim + slurp) в буфер |
-| `SHIFT + Print` | Скриншот всего экрана в буфер |
-| `SUPER + SHIFT + V` | История буфера обмена (cliphist) |
-| `XF86Audio*` | Громкость / мьют / медиа (wpctl, playerctl) |
-| `XF86MonBrightness*` | Яркость (brightnessctl) |
-| `Alt + Shift` | Раскладка us / ru |
-
-### Kitty
-
-| Хоткей | Действие |
-|---|---|
-| `Ctrl + Shift + T / W` | Новая / закрыть вкладку |
-| `Ctrl + Shift + ← / →` | Переключение вкладок |
-| `Ctrl + Shift + Enter` | Новое окно |
-| `Ctrl + Shift + +/-` | Размер шрифта |
-
-## Как это устроено
-
-```
-theme.sh "#hex"  ──►  colors.conf / colors.css / colors.rasi / colors.conf / 99-colors.conf / colors.scss
-style.sh glass   ──►  style.conf  / mode.css   / style.rasi  / style.conf  / 50-style.conf
-font.sh  "Font"  ──►                font.css    / font.rasi   / font.conf   / 60-font.conf   / font.scss
-                      (hyprland)    (waybar)     (rofi)        (kitty)       (dunst)          (eww)
+```bash
+cd ~/dotfiles && git pull
+./install.sh
+~/.config/hypr/scripts/fablium-shell.sh restart
 ```
 
-Базовые конфиги никогда не трогаются — генераторы пишут только небольшие подключаемые файлы, а компоненты перезагружаются на лету. Пресеты стилей лежат в `*/styles/` и `waybar/modes/` — легко добавить свой четвёртый стиль по образцу.
+## Меню и хоткеи
 
-## Обои
+| Хоткей | Действие |
+|---|---|
+| `SUPER + D` | Launcher приложений |
+| `SUPER + T` | Настройки: тема, стиль, обои, шрифт |
+| `SUPER + C` | Control center |
+| `SUPER + N` | Уведомления |
+| `SUPER + SHIFT + V` | История буфера |
+| `SUPER + SHIFT + P` | Lock / logout / sleep / reboot / shutdown |
+| `SUPER + SHIFT + T` | Пипетка цвета |
+| `SUPER + Enter` | Kitty |
+| `SUPER + L` | Hyprlock |
 
-Положи картинки (png/jpg/jpeg/webp) в `~/Pictures/wallpapers/` — они появятся миниатюрами в панели настроек. Смена делается через `swww` с плавным переходом, выбранные обои сохраняются и восстанавливаются при следующем входе. Вручную: `~/.config/hypr/scripts/wallpaper.sh /путь/к/картинке`.
+Клик по кнопкам bar открывает меню пространственно из той же точки. Escape, кнопка закрытия или клик снаружи закрывает popout; окно проигрывает обратную анимацию и не забирает ввод у других приложений.
 
-## Шрифты
+## Настройки
 
-Фиксированный набор Nerd Fonts (ставятся `install.sh`): JetBrainsMono, FiraCode, Iosevka, Hack, CascadiaCode. Выбор — в панели настроек; `font.sh` генерирует подключаемые файлы шрифта для Waybar, Kitty, Rofi и Dunst.
+Настройки — одна непрерывная прокручиваемая поверхность:
+
+- **Theme:** 12 пресетов, hex и `hyprpicker`;
+- **Style:** glass, minimal, neon; валидные анимации Hyprland 0.53+;
+- **Wallpaper:** responsive grid из `~/Pictures/wallpapers`, `swww` transition, кнопки «Из буфера» и «Открыть папку»;
+- **Font:** JetBrainsMono, FiraCode, Iosevka, Hack, Cascadia; пиктограммы используют отдельный Symbols Nerd Font и не ломаются при смене текста.
+
+Выбор остаётся в открытой панели. Результат показывается тихим внутренним toast вместо системного уведомления.
+
+### Импорт обоев
+
+Скопируй картинку, путь к PNG/JPEG/WebP или HTTPS URL и нажми **«Из буфера»**. `wallpaper-import.sh` проверяет MIME, разрешает только HTTPS, ограничивает файл 25 МБ и сохраняет уникальное имя в `~/Pictures/wallpapers`.
+
+```bash
+~/.config/hypr/scripts/wallpaper-import.sh
+~/.config/hypr/scripts/wallpaper.sh ~/Pictures/wallpapers/example.webp
+```
+
+## Архитектура
+
+| Путь | Назначение |
+|---|---|
+| `quickshell/fablium/shell.qml` | entrypoint, multi-monitor instances и IPC |
+| `quickshell/fablium/bar/` | bar и workspace state |
+| `quickshell/fablium/popouts/` | settings/control/notifications/clipboard/power |
+| `quickshell/fablium/launcher/` | desktop-entry launcher |
+| `quickshell/fablium/components/` | поверхности, карточки, кнопки, toast |
+| `quickshell/fablium/services/` | notification server и общие сервисы |
+| `hypr/styles/` | поддерживаемые glass/minimal/neon overrides |
+| `scripts/` | детерминированные команды темы, стиля, шрифта и обоев |
+
+Скрипты возвращают JSON и не перезапускают Quickshell. GUI меняет реактивное состояние сразу, а Hyprland/Kitty получают свои небольшие generated-файлы.
+
+## Управление и диагностика
+
+```bash
+# restart / stop / rollback к Waybar
+~/.config/hypr/scripts/fablium-shell.sh restart
+~/.config/hypr/scripts/fablium-shell.sh stop
+~/.config/hypr/scripts/fablium-shell.sh rollback
+
+# полная проверка зависимостей, линков, шрифтов, IPC и configerrors
+~/.config/hypr/scripts/fablium-doctor.sh
+
+# лог shell
+tail -f ~/.local/state/fablium/shell.log
+```
+
+Если Quickshell не установлен или не запускается, `fablium-shell.sh start` автоматически поднимает Waybar, поэтому свежая установка не оставляет систему без панели. Legacy-папки `waybar/`, `eww/`, `rofi/`, `dunst/` сохранены для rollback, но в штатной сессии не запускаются.

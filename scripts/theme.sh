@@ -182,13 +182,9 @@ EOF
 
 echo "$ACCENT" > "$STATE_FILE"
 
-# ── Перезагрузка компонентов ─────────────────
+# Hyprland и Kitty применяются без перезапуска Fablium Shell.
 command -v hyprctl >/dev/null && hyprctl reload >/dev/null 2>&1 || true
-pkill -SIGUSR2 waybar 2>/dev/null || true
-pkill dunst 2>/dev/null && dunst & disown 2>/dev/null || true
-# Kitty перечитает цвета в новых окнах; для живых окон:
 command -v kitty >/dev/null && kitty @ --to unix:/tmp/kitty set-colors -a "$CONFIG/kitty/colors.conf" 2>/dev/null || true
-eww -c "$CONFIG/eww" reload >/dev/null 2>&1 || true
 
-notify-send "Тема применена" "Акцент: #${ACCENT}" -i preferences-desktop-theme 2>/dev/null || true
-echo "Тема применена: #${ACCENT}"
+# Машиночитаемый ответ для Quickshell (никаких notify-send).
+printf '{"ok":true,"accent":"#%s"}\n' "$ACCENT"
