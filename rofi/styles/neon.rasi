@@ -1,0 +1,24 @@
+/* Режим NEON — контрастные рамки и акценты */
+window {
+    background-color: @bg-trans;
+    border: 2px;
+    border-color: @accent;
+    border-radius: 12px;
+}
+
+inputbar {
+    background-color: @surface0;
+    border: 1px;
+    border-color: @accent;
+}
+
+prompt {
+    text-color: @accent2;
+}
+
+element selected.normal {
+    background-color: @accent;
+    text-color: @bg;
+    border: 1px;
+    border-color: @accent2;
+}

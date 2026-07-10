@@ -1,0 +1,108 @@
+/* Waybar — базовые стили (общие для всех режимов) */
+
+* {
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 13px;
+  min-height: 0;
+}
+
+window#waybar {
+  background: alpha(@bg, 0.85);
+  color: @fg;
+  border-radius: 12px;
+  border: 1px solid alpha(@accent, 0.3);
+  transition: background 0.3s ease, border 0.3s ease;
+}
+
+#workspaces {
+  margin: 4px 6px;
+  padding: 0 4px;
+  background: @surface0;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+#workspaces button {
+  padding: 0 6px;
+  color: @muted;
+  border-radius: 8px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#workspaces button.active {
+  color: @accent;
+  background: alpha(@accent, 0.15);
+  padding: 0 12px;
+}
+
+#workspaces button:hover {
+  color: @fg;
+  background: @surface1;
+}
+
+#window {
+  margin-left: 8px;
+  color: @muted;
+}
+
+#clock {
+  font-weight: bold;
+  color: @accent;
+  transition: color 0.3s ease;
+}
+
+#tray,
+#pulseaudio,
+#network,
+#cpu,
+#memory,
+#battery,
+#custom-settings,
+#custom-power {
+  margin: 4px 3px;
+  padding: 0 10px;
+  background: @surface0;
+  border-radius: 8px;
+  color: @fg;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#pulseaudio:hover,
+#network:hover,
+#cpu:hover,
+#memory:hover,
+#battery:hover,
+#custom-settings:hover,
+#custom-power:hover {
+  background: @surface1;
+  color: @accent;
+}
+
+#battery.warning {
+  color: @yellow;
+}
+
+#battery.critical {
+  color: @red;
+  animation: blink 1s ease infinite alternate;
+}
+
+@keyframes blink {
+  to {
+    background: alpha(@red, 0.3);
+  }
+}
+
+#custom-settings {
+  color: @accent2;
+}
+
+#custom-power {
+  color: @red;
+  margin-right: 6px;
+}
+
+#custom-power:hover {
+  background: alpha(@red, 0.2);
+  color: @red;
+}

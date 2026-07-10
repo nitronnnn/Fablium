@@ -1,0 +1,12 @@
+/* Сгенерировано theme.sh */
+* {
+    bg:             #090c13;
+    bg-trans:       #090c13cc;
+    surface0:       #111622;
+    surface0-trans: #11162299;
+    surface1:       #1a2336;
+    fg:             #eff3fe;
+    muted:          #b5cbfa;
+    accent:         #7aa2f7;
+    accent2:        #f77aa2;
+}
