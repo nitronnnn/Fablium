@@ -7,6 +7,14 @@ LOG="$LOG_DIR/shell.log"
 mkdir -p "$LOG_DIR"
 
 start_shell() {
+    # Перегенерируем активный стиль при каждом старте. Это автоматически
+    # исправляет старые style.conf с невалидным `windows ..., fade`.
+    local style_file="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/.current-style"
+    local style="glass"
+    [[ -r "$style_file" ]] && read -r style < "$style_file"
+    case "$style" in glass|minimal|neon) ;; *) style="glass" ;; esac
+    "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/style.sh" "$style" >>"$LOG" 2>&1 || true
+
     if ! command -v quickshell >/dev/null 2>&1; then
         command -v waybar >/dev/null && pgrep -x waybar >/dev/null || waybar >>"$LOG" 2>&1 &
         printf 'Fablium: quickshell не установлен, запущен Waybar fallback\n' >> "$LOG"

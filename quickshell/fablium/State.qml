@@ -2,7 +2,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 
-QtObject {
+Singleton {
     id: root
 
     property string activeMenu: ""

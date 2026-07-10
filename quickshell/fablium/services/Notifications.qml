@@ -4,7 +4,7 @@ import Quickshell
 import Quickshell.Services.Notifications
 import ".."
 
-QtObject {
+Singleton {
     id: root
     property var items: []
 

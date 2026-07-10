@@ -13,8 +13,8 @@ PopupWindow {
     anchor.window: hostWindow
     anchor.rect.x: Math.max(10, Math.min(hostWindow.width - targetWidth - 10, State.anchorX - targetWidth / 2))
     anchor.rect.y: hostWindow.height + 8
-    implicitWidth: targetWidth
-    implicitHeight: targetHeight
+    width: targetWidth
+    height: targetHeight
     color: "transparent"
     visible: State.activeMenu.length > 0 && State.anchorWindow === hostWindow
     dismissible: true
